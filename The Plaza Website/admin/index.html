@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaza Admin - Event Management</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body class="admin-body">
+    <!-- Mobile Navigation (for potential public site navigation from admin) -->
+    <div class="mobile-overlay" style="display: none;"></div>
+    <nav class="mobile-nav" style="display: none;">
+        <div class="mobile-nav-header">
+            <a href="../index.html"><img src="../images/logo.png" alt="The Plaza Logo" class="logo"></a>
+            <button class="mobile-close-btn" aria-label="Close mobile menu">×</button>
+        </div>
+        <div class="mobile-nav-menu">
+            <a href="../index.html">Home</a>
+            <a href="../about.html">About</a>
+            <a href="../history.html">History</a>
+            <a href="../small-hall.html">Small Hall</a>
+            <a href="../large-hall.html">Large Hall</a>
+            <a href="../youth-club.html">Youth Club</a>
+            <a href="../events.html">Events</a>
+            <a href="../ownership.html">Ownership</a>
+        </div>
+    </nav>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="admin-logo">
+                    <img src="../images/logo.png" alt="The Plaza Logo">
+                </div>
+                <h1>Plaza Admin</h1>
+                <p>Event Management System</p>
+            </div>
+
+            <form id="adminLogin" class="admin-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autocomplete="username" placeholder="Enter username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter password">
+                </div>
+
+                <button type="submit" class="admin-btn">
+                    <span class="btn-text">Login</span>
+                    <div class="btn-loader" style="display: none;"></div>
+                </button>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CMS Dashboard -->
+    <div id="cmsDashboard" class="cms-container" style="display: none;">
+        <header class="cms-header">
+            <div class="cms-nav">
+                <div class="cms-brand">
+                    <div class="cms-logo">
+                        <img src="../images/logo.png" alt="The Plaza Logo">
+                    </div>
+                    <h1>Plaza CMS</h1>
+                </div>
+                <div class="cms-user">
+                    <span id="welcomeUser">Welcome, Admin</span>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="cms-main">
+            <div class="cms-sidebar">
+                <nav class="cms-menu">
+                    <button class="menu-item active" data-section="events">
+                        <span class="menu-icon">📅</span>
+                        Events
+                    </button>
+                    <button class="menu-item" data-section="settings">
+                        <span class="menu-icon">⚙️</span>
+                        Settings
+                    </button>
+                </nav>
+            </div>
+
+            <div class="cms-content">
+                <!-- Events Section -->
+                <section id="eventsSection" class="content-section active">
+                    <div class="section-header">
+                        <h2>Event Management</h2>
+                        <button id="addEventBtn" class="add-btn">
+                            <span class="btn-icon">+</span>
+                            Add Event
+                        </button>
+                    </div>
+
+                    <div class="events-container">
+                        <div id="eventsList" class="events-list">
+                            <!-- Events will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settingsSection" class="content-section">
+                    <div class="section-header">
+                        <h2>System Settings</h2>
+                    </div>
+                    <div class="settings-container">
+                        <div class="setting-card">
+                            <h3>Export Data</h3>
+                            <p>Download all events data as JSON for backup or migration</p>
+                            <button id="exportBtn" class="setting-btn">Export Events</button>
+                        </div>
+                        <div class="setting-card">
+                            <h3>Cache Management</h3>
+                            <p>Clear cached data and refresh the system</p>
+                            <button id="clearCacheBtn" class="setting-btn">Clear Cache</button>
+                        </div>
+                        <div class="setting-card">
+                            <h3>System Info</h3>
+                            <p>Built for Netlify deployment with localStorage persistence</p>
+                            <p><strong>Version:</strong> 1.0.0</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Event</h3>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+
+            <form id="eventForm" class="event-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title *</label>
+                        <input type="text" id="eventTitle" name="title" required placeholder="e.g. Christmas Concert">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDate">Event Date *</label>
+                        <input type="date" id="eventDate" name="date" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventTime">Time</label>
+                        <input type="time" id="eventTime" name="time" placeholder="19:00">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventVenue">Venue</label>
+                        <select id="eventVenue" name="venue">
+                            <option value="small-hall">Small Hall</option>
+                            <option value="large-hall">Large Hall</option>
+                            <option value="youth-club">Youth Club</option>
+                            <option value="both-halls">Both Halls</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription" name="description" rows="4" placeholder="Brief description of the event..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventPrice">Ticket Price (€)</label>
+                        <input type="number" id="eventPrice" name="price" min="0" step="0.01" placeholder="10.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventCapacity">Capacity</label>
+                        <input type="number" id="eventCapacity" name="capacity" min="1" placeholder="75">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventStatus">Status</label>
+                        <select id="eventStatus" name="status">
+                            <option value="upcoming">Upcoming</option>
+                            <option value="ongoing">Ongoing</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="showBooking">Show Book Now Button</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="showBooking" name="showBooking" checked>
+                            <label for="showBooking" class="toggle-label">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-text">Enable booking button</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelBtn" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="save-btn">
+                        <span class="btn-text">Save Event</span>
+                        <div class="btn-loader" style="display: none;"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
